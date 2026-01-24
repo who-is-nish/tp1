@@ -63,23 +63,17 @@ for (let i = 0; i < 30; i++) {
   emojiContainer.appendChild(e);
 }
 
-const music = document.getElementById("bgMusic");
-const musicTime = localStorage.getItem("musicTime");
-
-if (localStorage.getItem("musicPlaying") === "true") {
-    if (musicTime) {
-        music.currentTime = parseFloat(musicTime);
-    }
-    music.play().catch(() => {});
+const musicStarted = localStorage.getItem("musicStarted");
+if (musicStarted === "true") {
+  document.addEventListener("click", () => {
+    document.getElementById("bgMusic").play().catch(()=>{});
+  }, { once: true });
 }
 
-// Save current time before leaving
-window.addEventListener("beforeunload", () => {
-    localStorage.setItem("musicTime", music.currentTime);
-});
 
 
   </script>
 
 </body>
 </html>
+
