@@ -62,12 +62,24 @@ if (balloonContainer) {
 }
 
   // Background music
+  <script>
   const music = document.getElementById("bgMusic");
-  if(music){
-    music.play().catch(()=>{});
+
+  function enterSurprise() {
+    if (music) {
+      music.currentTime = 0; // reset
+      music.play().catch(() => {});
+    }
+
+    setTimeout(() => {
+      window.location.href = "wish.html";
+    }, 300); // small delay so music actually starts
   }
+</script>
+
   
 </script>
 
 </body>
 </html>
+
