@@ -1,124 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Something Special 🌙</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body class="night-bg">
-
-<div class="balloon-container"></div>
-
-<div class="container">
-  <h1 id="title">Something special for you 🌙</h1>
-
-  <p id="message">Just a little surprise… it’s worth it 💫</p>
-
-  <!-- Button always visible now -->
-  <button class="enter-btn show-btn fade-in delay-3"
-            onclick="enterSurprise()">
-      Lets GOOO ➜
-    </button>
-</div>
-
-<audio id="bgMusic" loop>
-  <source src="swim.mp3" type="audio/mpeg">
-</audio>
-<button id="musicToggle" class="music-btn">Play </button>
 <script>
-  // Button click function
- function enterSurprise() {
-
-  // Balloons animation
-  const balloonContainer = document.querySelector(".balloon-container");
-if (balloonContainer) {
-  const emojis = ["🎈","🎉","🎊"];
-  for (let i = 0; i < 30; i++) {
-    const b = document.createElement("span");
-    b.className = "balloon";
-    b.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-
-    // Random horizontal position
-    b.style.left = Math.random() * 100 + "vw";
-
-    // Random size
-    const size = 20 + Math.random() * 30; // 20px to 50px
-    b.style.fontSize = size + "px";
-
-    // Random animation duration (speed)
-    const duration = 8 + Math.random() * 8; // 8s to 16s
-    b.style.animationDuration = duration + "s";
-
-    // Random animation delay
-    b.style.animationDelay = Math.random() * 5 + "s";
-
-    balloonContainer.appendChild(b);
-  }
-}
-
   const music = document.getElementById("bgMusic");
   const toggleBtn = document.getElementById("musicToggle");
 
+  /* ---------------- MUSIC SETUP (runs on page load) ---------------- */
+
   if (music && toggleBtn) {
 
-    // Restore time
+    // Restore playback time
     const savedTime = localStorage.getItem("musicTime");
     if (savedTime) {
       music.currentTime = parseFloat(savedTime);
     }
 
-    // Restore play state
+    // Restore pause state
     const isPaused = localStorage.getItem("musicPaused") === "true";
-    toggleBtn.textContent = isPaused ? "▶️" : "⏸";
+    toggleBtn.textContent = isPaused ? "▶ Play" : "⏸ Pause";
 
-    // Try resume after interaction
-    document.addEventListener("click", () => {
-      if (!isPaused) {
-        music.play().catch(()=>{});
-      }
-    }, { once: true });
-
-    // Save time
+    // Save playback time
     setInterval(() => {
       if (!music.paused) {
         localStorage.setItem("musicTime", music.currentTime);
       }
     }, 500);
 
-    // Toggle play/pause
+    // Play / Pause button
     toggleBtn.onclick = (e) => {
       e.stopPropagation();
 
       if (music.paused) {
         music.play().then(() => {
-          toggleBtn.textContent = "⏸";
+          toggleBtn.textContent = "⏸ Pause";
           localStorage.setItem("musicPaused", "false");
         }).catch(()=>{});
       } else {
         music.pause();
-        toggleBtn.textContent = "▶️";
+        toggleBtn.textContent = "▶ Play";
         localStorage.setItem("musicPaused", "true");
       }
     };
   }
 
+  /* ---------------- ENTER BUTTON ---------------- */
 
- 
+  function enterSurprise() {
+    // Start music if not started
+    if (music && music.paused) {
+      music.play().catch(()=>{});
+      localStorage.setItem("musicPaused", "false");
+    }
 
+    // Navigate
+    setTimeout(() => {
+      window.location.href = "wish.html";
+    }, 300);
+  }
 
+  /* ---------------- BALLOONS (run once) ---------------- */
 
-  
+  const balloonContainer = document.querySelector(".balloon-container");
+  if (balloonContainer) {
+    const emojis = ["🎈","🎉","🎊"];
+    for (let i = 0; i < 30; i++) {
+      const b = document.createElement("span");
+      b.className = "balloon";
+      b.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      b.style.left = Math.random() * 100 + "vw";
+      b.style.fontSize = 20 + Math.random() * 30 + "px";
+      b.style.animationDuration = 8 + Math.random() * 8 + "s";
+      b.style.animationDelay = Math.random() * 5 + "s";
+      balloonContainer.appendChild(b);
+    }
+  }
 </script>
-
-</body>
-</html>
-
-
-
-
-
-
-
