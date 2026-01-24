@@ -32,19 +32,6 @@
 <script>
   // Button click function
  function enterSurprise() {
-  const music = document.getElementById("bgMusic");
-
-  if (music) {
-    music.currentTime = 0;               // start fresh first time
-    music.play().catch(() => {});
-    localStorage.setItem("musicStarted", "true");
-  }
-
-  setTimeout(() => {
-    window.location.href = "wish.html";
-  }, 300);
-}
-
 
   // Balloons animation
   const balloonContainer = document.querySelector(".balloon-container");
@@ -73,6 +60,53 @@ if (balloonContainer) {
   }
 }
 
+  const music = document.getElementById("bgMusic");
+  const toggleBtn = document.getElementById("musicToggle");
+
+  if (music && toggleBtn) {
+
+    // Restore time
+    const savedTime = localStorage.getItem("musicTime");
+    if (savedTime) {
+      music.currentTime = parseFloat(savedTime);
+    }
+
+    // Restore play state
+    const isPaused = localStorage.getItem("musicPaused") === "true";
+    toggleBtn.textContent = isPaused ? "▶️" : "⏸";
+
+    // Try resume after interaction
+    document.addEventListener("click", () => {
+      if (!isPaused) {
+        music.play().catch(()=>{});
+      }
+    }, { once: true });
+
+    // Save time
+    setInterval(() => {
+      if (!music.paused) {
+        localStorage.setItem("musicTime", music.currentTime);
+      }
+    }, 500);
+
+    // Toggle play/pause
+    toggleBtn.onclick = (e) => {
+      e.stopPropagation();
+
+      if (music.paused) {
+        music.play().then(() => {
+          toggleBtn.textContent = "⏸";
+          localStorage.setItem("musicPaused", "false");
+        }).catch(()=>{});
+      } else {
+        music.pause();
+        toggleBtn.textContent = "▶️";
+        localStorage.setItem("musicPaused", "true");
+      }
+    };
+  }
+
+
  
 
 
@@ -82,6 +116,7 @@ if (balloonContainer) {
 
 </body>
 </html>
+
 
 
 
