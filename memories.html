@@ -4,36 +4,44 @@
   <meta charset="UTF-8">
   <title>Our Memories 💫</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="night-bg">
-<div class="flower-container"></div>
-<audio id="bgMusic" loop>
-    <source src="swim.mp3" type="audio/mpeg">
-</audio>
 
+<body class="night-bg">
+
+  <!-- Flowers -->
+  <div class="flower-container"></div>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="swim.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Play / Pause Button -->
+  <button id="musicToggle" class="music-btn">▶ Play</button>
+
+  <!-- Content -->
   <div class="container">
     <h1 class="fade-in">💫 Some Special Moments 💫</h1>
-<div class="memory-scroll-container">
-  <div class="memory-block fade-in delay-1">
-    <div class="memory-text">🌸 The laughs we never planned</div>
-    <img src="photo1.jpg" alt="Laughs Memory" class="memory-photo">
-  </div>
 
-  <div class="memory-block fade-in delay-2">
-    <div class="memory-text">✨ The moments that turned into memories</div>
-    <img src="photo1.jpg" alt="Moments Memory" class="memory-photo">
-  </div>
+    <div class="memory-scroll-container">
 
-  <div class="memory-block fade-in delay-3">
-    <div class="memory-text">💕 And the bond that keeps getting stronger</div>
-    <img src="photo1.jpg" alt="Bond Memory" class="memory-photo">
-  </div>
+      <div class="memory-block fade-in delay-1">
+        <div class="memory-text">🌸 The laughs we never planned</div>
+        <img src="photo1.jpg" class="memory-photo">
+      </div>
 
-  <!-- Add more memory-blocks as needed -->
-</div>
+      <div class="memory-block fade-in delay-2">
+        <div class="memory-text">✨ The moments that turned into memories</div>
+        <img src="photo1.jpg" class="memory-photo">
+      </div>
 
+      <div class="memory-block fade-in delay-3">
+        <div class="memory-text">💕 And the bond that keeps getting stronger</div>
+        <img src="photo1.jpg" class="memory-photo">
+      </div>
+
+    </div>
 
     <button class="enter-btn show-btn fade-in delay-4"
             onclick="goNext()">
@@ -41,49 +49,73 @@
     </button>
   </div>
 
+  <!-- Script -->
   <script>
-    /* 🔐 PAGE LOCK — BLOCK BEFORE MIDNIGHT */
-    function isUnlocked() {
-      const now = new Date();
-      const midnight = new Date();
-      midnight.setHours(0, 0, 0, 0);
-      return now >= midnight;
+    const music = document.getElementById("bgMusic");
+    const toggleBtn = document.getElementById("musicToggle");
+
+    /* ---------- MUSIC SETUP ---------- */
+    if (music && toggleBtn) {
+
+      const savedTime = localStorage.getItem("musicTime");
+      if (savedTime) {
+        music.currentTime = parseFloat(savedTime);
+      }
+
+      const musicAllowed = localStorage.getItem("musicAllowed") === "true";
+      const isPaused = localStorage.getItem("musicPaused") === "true";
+
+      toggleBtn.textContent = isPaused ? "▶ Play" : "⏸ Pause";
+
+      // Auto-play if already allowed
+      if (musicAllowed && !isPaused) {
+        music.play().catch(()=>{});
+      }
+
+      // Save time
+      setInterval(() => {
+        if (!music.paused) {
+          localStorage.setItem("musicTime", music.currentTime);
+        }
+      }, 500);
+
+      // Toggle play/pause
+      toggleBtn.onclick = (e) => {
+        e.stopPropagation();
+
+        if (music.paused) {
+          music.play().then(() => {
+            toggleBtn.textContent = "⏸ Pause";
+            localStorage.setItem("musicPaused", "false");
+            localStorage.setItem("musicAllowed", "true");
+          }).catch(()=>{});
+        } else {
+          music.pause();
+          toggleBtn.textContent = "▶ Play";
+          localStorage.setItem("musicPaused", "true");
+        }
+      };
     }
 
-    // if (!isUnlocked()) {
-    //   window.location.href = "index.html";
-    // }
-
+    /* ---------- NEXT PAGE ---------- */
     function goNext() {
       window.location.href = "letter.html";
     }
+
+    /* ---------- FLOWERS ---------- */
     const flowerContainer = document.querySelector(".flower-container");
-const flowers = ["🌸", "🌺", "🌼", "🌷"];
+    const flowers = ["🌸", "🌺", "🌼", "🌷"];
 
-for (let i = 0; i < 25; i++) {
-  const f = document.createElement("span");
-  f.className = "flower";
-  f.textContent = flowers[Math.floor(Math.random() * flowers.length)];
-  f.style.left = Math.random() * 100 + "vw";
-  f.style.animationDuration = 4 + Math.random() * 5 + "s";
-  f.style.animationDelay = Math.random() * 5 + "s";
-  flowerContainer.appendChild(f);
-}
-
-  if (music && music.paused) {
-    music.play().catch(()=>{});
-    localStorage.setItem("musicPaused", "false");
-    localStorage.setItem("musicAllowed", "true");
-  }
-
-  setTimeout(() => {
-    window.location.href = "wish.html";
-  }, 300);
-}
-
+    for (let i = 0; i < 25; i++) {
+      const f = document.createElement("span");
+      f.className = "flower";
+      f.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+      f.style.left = Math.random() * 100 + "vw";
+      f.style.animationDuration = 4 + Math.random() * 5 + "s";
+      f.style.animationDelay = Math.random() * 5 + "s";
+      flowerContainer.appendChild(f);
+    }
   </script>
 
 </body>
 </html>
-
-
