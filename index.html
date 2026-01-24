@@ -30,9 +30,20 @@
 
 <script>
   // Button click function
-  function enterSurprise() {
-    window.location.href = "wish.html";
+ function enterSurprise() {
+  const music = document.getElementById("bgMusic");
+
+  if (music) {
+    music.currentTime = 0;               // start fresh first time
+    music.play().catch(() => {});
+    localStorage.setItem("musicStarted", "true");
   }
+
+  setTimeout(() => {
+    window.location.href = "wish.html";
+  }, 300);
+}
+
 
   // Balloons animation
   const balloonContainer = document.querySelector(".balloon-container");
@@ -61,20 +72,8 @@ if (balloonContainer) {
   }
 }
 
-  // Background music
+ 
 
-  const music = document.getElementById("bgMusic");
-
-  function enterSurprise() {
-    if (music) {
-      music.currentTime = 0; // reset
-      music.play().catch(() => {});
-    }
-
-    setTimeout(() => {
-      window.location.href = "wish.html";
-    }, 300); // small delay so music actually starts
-  }
 
 
   
@@ -82,5 +81,6 @@ if (balloonContainer) {
 
 </body>
 </html>
+
 
 
