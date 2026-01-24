@@ -4,75 +4,65 @@
   <meta charset="UTF-8">
   <title>Happy Birthday 🎉</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="night-bg finale-bg">
+
+<!-- 🎵 Background Music -->
 <audio id="bgMusic" loop>
-    <source src="swim.mp3" type="audio/mpeg">
+  <source src="swim.mp3" type="audio/mpeg">
 </audio>
 
-  <div class="container finale-container">
-    <h1 class="fade-in">🎉 Happy Birthday 🎉</h1>
+<div class="container finale-container">
+  <h1 class="fade-in">🎉 Happy Birthday 🎉</h1>
 
-    <p class="fade-in delay-1">
-      I hope this little surprise made you smile 💖
-    </p>
+  <p class="fade-in delay-1">
+    I hope this little surprise made you smile 💖
+  </p>
 
-    <p class="fade-in delay-2">
-      May this year bring you happiness, peace,
-      and everything you truly deserve ✨
-    </p>
+  <p class="fade-in delay-2">
+    May this year bring you happiness, peace,
+    and everything you truly deserve ✨
+  </p>
 
-    <p class="fade-in delay-3 signature">
-      — Always cheering for you 🌸
-    </p>
-  </div>
+  <p class="fade-in delay-3 signature">
+    — Always cheering for you 🌸
+  </p>
+</div>
 
-  <!-- 🎆 Confetti -->
-  <div class="confetti-container"></div>
+<!-- 🎆 Confetti -->
+<div class="confetti-container"></div>
 
-  <script>
-    /* 🔐 PAGE LOCK — BLOCK BEFORE MIDNIGHT */
-    function isUnlocked() {
-      const now = new Date();
-      const midnight = new Date();
-      midnight.setHours(0, 0, 0, 0);
-      return now >= midnight;
-    }
-
-    // if (!isUnlocked()) {
-    //   window.location.href = "index.html";
-    // }
-
-    /* 🎉 CONFETTI EFFECT */
-    const confettiContainer = document.querySelector(".confetti-container");
-
-    for (let i = 0; i < 60; i++) {
-      const confetti = document.createElement("span");
-      confetti.classList.add("confetti");
-      confetti.style.left = Math.random() * 100 + "vw";
-      confetti.style.animationDelay = Math.random() * 5 + "s";
-      confetti.style.animationDuration = 3 + Math.random() * 3 + "s";
-      confettiContainer.appendChild(confetti);
-    }
-
+<script>
+/* 🎵 Continue music smoothly */
 const music = document.getElementById("bgMusic");
 const musicTime = localStorage.getItem("musicTime");
 
 if (localStorage.getItem("musicPlaying") === "true") {
-    if (musicTime) {
-        music.currentTime = parseFloat(musicTime);
-    }
-    music.play().catch(() => {});
+  if (musicTime) {
+    music.currentTime = parseFloat(musicTime);
+  }
+  music.play().catch(() => {});
 }
 
-// Save current time before leaving
+// Save music position
 window.addEventListener("beforeunload", () => {
-    localStorage.setItem("musicTime", music.currentTime);
+  localStorage.setItem("musicTime", music.currentTime);
 });
 
-  </script>
+/* 🎉 Confetti effect */
+const confettiContainer = document.querySelector(".confetti-container");
+
+for (let i = 0; i < 60; i++) {
+  const confetti = document.createElement("span");
+  confetti.classList.add("confetti");
+  confetti.style.left = Math.random() * 100 + "vw";
+  confetti.style.animationDelay = Math.random() * 5 + "s";
+  confetti.style.animationDuration = 3 + Math.random() * 3 + "s";
+  confettiContainer.appendChild(confetti);
+}
+</script>
 
 </body>
 </html>
