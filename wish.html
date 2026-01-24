@@ -69,42 +69,43 @@ for (let i = 0; i < 30; i++) {
 
   if (music && toggleBtn) {
 
-    // Restore time
+    /* ---------- RESTORE TIME ---------- */
     const savedTime = localStorage.getItem("musicTime");
     if (savedTime) {
       music.currentTime = parseFloat(savedTime);
     }
 
-    // Restore play state
+    /* ---------- STATE ---------- */
+    const musicAllowed = localStorage.getItem("musicAllowed") === "true";
     const isPaused = localStorage.getItem("musicPaused") === "true";
-    toggleBtn.textContent = isPaused ? "▶️" : "⏸";
 
-    // Try resume after interaction
-    document.addEventListener("click", () => {
-      if (!isPaused) {
-        music.play().catch(()=>{});
-      }
-    }, { once: true });
+    toggleBtn.textContent = isPaused ? "▶ Play" : "⏸ Pause";
 
-    // Save time
+    /* ---------- AUTO PLAY ON ALL PAGES ---------- */
+    if (musicAllowed && !isPaused) {
+      music.play().catch(() => {});
+    }
+
+    /* ---------- SAVE TIME ---------- */
     setInterval(() => {
       if (!music.paused) {
         localStorage.setItem("musicTime", music.currentTime);
       }
     }, 500);
 
-    // Toggle play/pause
+    /* ---------- PLAY / PAUSE BUTTON ---------- */
     toggleBtn.onclick = (e) => {
       e.stopPropagation();
 
       if (music.paused) {
         music.play().then(() => {
-          toggleBtn.textContent = "⏸";
+          toggleBtn.textContent = "⏸ Pause";
           localStorage.setItem("musicPaused", "false");
+          localStorage.setItem("musicAllowed", "true"); // 🔑 KEY LINE
         }).catch(()=>{});
       } else {
         music.pause();
-        toggleBtn.textContent = "▶️";
+        toggleBtn.textContent = "▶ Play";
         localStorage.setItem("musicPaused", "true");
       }
     };
@@ -113,10 +114,12 @@ for (let i = 0; i < 30; i++) {
 
 
 
+
   </script>
 
 </body>
 </html>
+
 
 
 
