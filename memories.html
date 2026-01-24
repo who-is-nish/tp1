@@ -70,16 +70,20 @@ for (let i = 0; i < 25; i++) {
   flowerContainer.appendChild(f);
 }
 
-const musicStarted = localStorage.getItem("musicStarted");
-if (musicStarted === "true") {
-  document.addEventListener("click", () => {
-    document.getElementById("bgMusic").play().catch(()=>{});
-  }, { once: true });
+  if (music && music.paused) {
+    music.play().catch(()=>{});
+    localStorage.setItem("musicPaused", "false");
+    localStorage.setItem("musicAllowed", "true");
+  }
+
+  setTimeout(() => {
+    window.location.href = "wish.html";
+  }, 300);
 }
-;
 
   </script>
 
 </body>
 </html>
+
 
