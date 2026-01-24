@@ -33,46 +33,54 @@
 
   <!-- Script -->
   <script>
-    const music = document.getElementById("bgMusic");
-    const toggleBtn = document.getElementById("musicToggle");
+<script>
+  const music = document.getElementById("bgMusic");
+  const toggleBtn = document.getElementById("musicToggle");
 
-    /* ---------------- MUSIC SETUP ---------------- */
+  if (music && toggleBtn) {
 
-    if (music && toggleBtn) {
-
-      // Restore playback time
-      const savedTime = localStorage.getItem("musicTime");
-      if (savedTime) {
-        music.currentTime = parseFloat(savedTime);
-      }
-
-      // Restore pause state
-      const isPaused = localStorage.getItem("musicPaused") === "true";
-      toggleBtn.textContent = isPaused ? "▶ Play" : "⏸ Pause";
-
-      // Save time continuously
-      setInterval(() => {
-        if (!music.paused) {
-          localStorage.setItem("musicTime", music.currentTime);
-        }
-      }, 500);
-
-      // Play / Pause button
-      toggleBtn.onclick = (e) => {
-        e.stopPropagation();
-
-        if (music.paused) {
-          music.play().then(() => {
-            toggleBtn.textContent = "⏸ Pause";
-            localStorage.setItem("musicPaused", "false");
-          }).catch(()=>{});
-        } else {
-          music.pause();
-          toggleBtn.textContent = "▶ Play";
-          localStorage.setItem("musicPaused", "true");
-        }
-      };
+    /* ---------- RESTORE TIME ---------- */
+    const savedTime = localStorage.getItem("musicTime");
+    if (savedTime) {
+      music.currentTime = parseFloat(savedTime);
     }
+
+    /* ---------- STATE ---------- */
+    const musicAllowed = localStorage.getItem("musicAllowed") === "true";
+    const isPaused = localStorage.getItem("musicPaused") === "true";
+
+    toggleBtn.textContent = isPaused ? "▶ Play" : "⏸ Pause";
+
+    /* ---------- AUTO PLAY ON ALL PAGES ---------- */
+    if (musicAllowed && !isPaused) {
+      music.play().catch(() => {});
+    }
+
+    /* ---------- SAVE TIME ---------- */
+    setInterval(() => {
+      if (!music.paused) {
+        localStorage.setItem("musicTime", music.currentTime);
+      }
+    }, 500);
+
+    /* ---------- PLAY / PAUSE BUTTON ---------- */
+    toggleBtn.onclick = (e) => {
+      e.stopPropagation();
+
+      if (music.paused) {
+        music.play().then(() => {
+          toggleBtn.textContent = "⏸ Pause";
+          localStorage.setItem("musicPaused", "false");
+          localStorage.setItem("musicAllowed", "true"); // 🔑 KEY LINE
+        }).catch(()=>{});
+      } else {
+        music.pause();
+        toggleBtn.textContent = "▶ Play";
+        localStorage.setItem("musicPaused", "true");
+      }
+    };
+  }
+</script>
 
     /* ---------------- ENTER BUTTON ---------------- */
 
@@ -114,4 +122,5 @@
 
 </body>
 </html>
+
 
