@@ -4,15 +4,23 @@
   <meta charset="UTF-8">
   <title>A Letter For You 💌</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="night-bg">
-<div class="star-container"></div>
-<audio id="bgMusic" loop>
-    <source src="swim.mp3" type="audio/mpeg">
-</audio>
 
+<body class="night-bg">
+
+  <!-- Stars -->
+  <div class="star-container"></div>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="swim.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Play / Pause Button -->
+  <button id="musicToggle" class="music-btn">▶ Play</button>
+
+  <!-- Content -->
   <div class="container letter-container">
     <h1 class="fade-in">💌 Just For You</h1>
 
@@ -38,50 +46,74 @@
     </button>
   </div>
 
+  <!-- Script -->
   <script>
-    /* 🔐 PAGE LOCK — BLOCK BEFORE MIDNIGHT */
-    function isUnlocked() {
-      const now = new Date();
-      const midnight = new Date();
-      midnight.setHours(0, 0, 0, 0);
-      return now >= midnight;
+    const music = document.getElementById("bgMusic");
+    const toggleBtn = document.getElementById("musicToggle");
+
+    /* ---------- MUSIC SETUP ---------- */
+    if (music && toggleBtn) {
+
+      // Restore time
+      const savedTime = localStorage.getItem("musicTime");
+      if (savedTime) {
+        music.currentTime = parseFloat(savedTime);
+      }
+
+      // Restore state
+      const musicAllowed = localStorage.getItem("musicAllowed") === "true";
+      const isPaused = localStorage.getItem("musicPaused") === "true";
+
+      toggleBtn.textContent = isPaused ? "▶ Play" : "⏸ Pause";
+
+      // Auto-play if already allowed
+      if (musicAllowed && !isPaused) {
+        music.play().catch(()=>{});
+      }
+
+      // Save time continuously
+      setInterval(() => {
+        if (!music.paused) {
+          localStorage.setItem("musicTime", music.currentTime);
+        }
+      }, 500);
+
+      // Toggle button
+      toggleBtn.onclick = (e) => {
+        e.stopPropagation();
+
+        if (music.paused) {
+          music.play().then(() => {
+            toggleBtn.textContent = "⏸ Pause";
+            localStorage.setItem("musicPaused", "false");
+            localStorage.setItem("musicAllowed", "true");
+          }).catch(()=>{});
+        } else {
+          music.pause();
+          toggleBtn.textContent = "▶ Play";
+          localStorage.setItem("musicPaused", "true");
+        }
+      };
     }
 
-    // if (!isUnlocked()) {
-    //   window.location.href = "index.html";
-    // }
-
+    /* ---------- NEXT PAGE ---------- */
     function goNext() {
       window.location.href = "finale.html";
     }
+
+    /* ---------- STARS ---------- */
     const starContainer = document.querySelector(".star-container");
-const stars = ["⭐", "✨", "🌟"];
+    const stars = ["⭐", "✨", "🌟"];
 
-for (let i = 0; i < 35; i++) {
-  const s = document.createElement("span");
-  s.className = "star";
-  s.textContent = stars[Math.floor(Math.random() * stars.length)];
-  s.style.left = Math.random() * 100 + "vw";
-  s.style.animationDuration = 5 + Math.random() * 6 + "s";
-  s.style.animationDelay = Math.random() * 6 + "s";
-  starContainer.appendChild(s);
-}
-
-const music = document.getElementById("bgMusic");
-const musicTime = localStorage.getItem("musicTime");
-
-if (localStorage.getItem("musicPlaying") === "true") {
-    if (musicTime) {
-        music.currentTime = parseFloat(musicTime);
+    for (let i = 0; i < 35; i++) {
+      const s = document.createElement("span");
+      s.className = "star";
+      s.textContent = stars[Math.floor(Math.random() * stars.length)];
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.animationDuration = 5 + Math.random() * 6 + "s";
+      s.style.animationDelay = Math.random() * 6 + "s";
+      starContainer.appendChild(s);
     }
-    music.play().catch(() => {});
-}
-
-// Save current time before leaving
-window.addEventListener("beforeunload", () => {
-    localStorage.setItem("musicTime", music.currentTime);
-});
-
   </script>
 
 </body>
