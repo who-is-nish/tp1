@@ -285,3 +285,25 @@ p {
 .memory-scroll-container::-webkit-scrollbar-track {
   background: transparent;
 }
+.music-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  font-size: 22px;
+  padding: 12px 14px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  color: white;
+  box-shadow: 0 0 15px rgba(255,255,255,0.3);
+  transition: transform 0.2s ease, background 0.3s;
+}
+
+.music-btn:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.25);
+}
+
