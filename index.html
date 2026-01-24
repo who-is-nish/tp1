@@ -77,10 +77,17 @@
     /* ---------------- ENTER BUTTON ---------------- */
 
     function enterSurprise() {
-      if (music && music.paused) {
-        music.play().catch(()=>{});
-        localStorage.setItem("musicPaused", "false");
-      }
+  if (music && music.paused) {
+    music.play().catch(()=>{});
+    localStorage.setItem("musicPaused", "false");
+    localStorage.setItem("musicAllowed", "true");
+  }
+
+  setTimeout(() => {
+    window.location.href = "wish.html";
+  }, 300);
+}
+
 
       setTimeout(() => {
         window.location.href = "wish.html";
@@ -107,3 +114,4 @@
 
 </body>
 </html>
+
