@@ -35,23 +35,30 @@
 <div class="confetti-container"></div>
 
 <script>
-/* 🎵 Continue music smoothly */
+/* 🎵 MUSIC CONTINUITY */
 const music = document.getElementById("bgMusic");
-const musicTime = localStorage.getItem("musicTime");
 
-if (localStorage.getItem("musicPlaying") === "true") {
-  if (musicTime) {
-    music.currentTime = parseFloat(musicTime);
-  }
+const savedTime = localStorage.getItem("musicTime");
+if (savedTime) {
+  music.currentTime = parseFloat(savedTime);
+}
+
+const musicAllowed = localStorage.getItem("musicAllowed") === "true";
+const isPaused = localStorage.getItem("musicPaused") === "true";
+
+// Auto play if user already allowed music
+if (musicAllowed && !isPaused) {
   music.play().catch(() => {});
 }
 
-// Save music position
-window.addEventListener("beforeunload", () => {
-  localStorage.setItem("musicTime", music.currentTime);
-});
+// Keep saving time
+setInterval(() => {
+  if (!music.paused) {
+    localStorage.setItem("musicTime", music.currentTime);
+  }
+}, 500);
 
-/* 🎉 Confetti effect */
+/* 🎉 CONFETTI */
 const confettiContainer = document.querySelector(".confetti-container");
 
 for (let i = 0; i < 60; i++) {
@@ -64,5 +71,7 @@ for (let i = 0; i < 60; i++) {
 }
 </script>
 
+
 </body>
 </html>
+
