@@ -63,12 +63,52 @@ for (let i = 0; i < 30; i++) {
   emojiContainer.appendChild(e);
 }
 
-const musicStarted = localStorage.getItem("musicStarted");
-if (musicStarted === "true") {
-  document.addEventListener("click", () => {
-    document.getElementById("bgMusic").play().catch(()=>{});
-  }, { once: true });
-}
+  const music = document.getElementById("bgMusic");
+  const toggleBtn = document.getElementById("musicToggle");
+
+  if (music && toggleBtn) {
+
+    // Restore time
+    const savedTime = localStorage.getItem("musicTime");
+    if (savedTime) {
+      music.currentTime = parseFloat(savedTime);
+    }
+
+    // Restore play state
+    const isPaused = localStorage.getItem("musicPaused") === "true";
+    toggleBtn.textContent = isPaused ? "▶️" : "⏸";
+
+    // Try resume after interaction
+    document.addEventListener("click", () => {
+      if (!isPaused) {
+        music.play().catch(()=>{});
+      }
+    }, { once: true });
+
+    // Save time
+    setInterval(() => {
+      if (!music.paused) {
+        localStorage.setItem("musicTime", music.currentTime);
+      }
+    }, 500);
+
+    // Toggle play/pause
+    toggleBtn.onclick = (e) => {
+      e.stopPropagation();
+
+      if (music.paused) {
+        music.play().then(() => {
+          toggleBtn.textContent = "⏸";
+          localStorage.setItem("musicPaused", "false");
+        }).catch(()=>{});
+      } else {
+        music.pause();
+        toggleBtn.textContent = "▶️";
+        localStorage.setItem("musicPaused", "true");
+      }
+    };
+  }
+
 
 
 
@@ -76,4 +116,5 @@ if (musicStarted === "true") {
 
 </body>
 </html>
+
 
