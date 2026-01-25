@@ -4,77 +4,98 @@
   <meta charset="UTF-8">
   <title>Something Special 🌙</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  
+  <!-- INITIAL BRIGHT CSS -->
+  <link id="themeCSS" rel="stylesheet" href="bright.css">
+  
+  
 </head>
-
 <body class="night-bg">
 
-  <!-- Balloons -->
-  <div class="balloon-container"></div>
+  <!-- STEP 1: FIRST QUESTION -->
+<div class="qa-box fade-in delay-2">
+  <p class="qa-question">Hey… wanna see what I made for you? 💫</p>
+  <div class="qa-actions">
+    <button class="qa-btn" onclick="showPartyMood()">Yes 🥺</button>
+    <button class="qa-btn" onclick="showPartyMood()">Of course ❤️</button>
+  </div>
+</div>
 
-  <!-- Main Content -->
-  <div class="container">
-    <h1 id="title">Something special for you 🌙</h1>
-    <p id="message">Just a little surprise… it’s worth it 💫</p>
-    <button id="musicToggle" class="music-btn">
-  let’s add some music ♫
-</button>
+<!-- STEP 2: PARTY MOOD STATEMENT (BRIGHT CSS) -->
+<div id="partyMood" style="display:none;" class="fade-in delay-2">
+  <p>Isn’t it too boring… let’s make it some party mood 🎉</p>
+  <button class="qa-btn" onclick="showBalloonPrompt()">Next ➜</button>
+</div>
 
-    <button class="enter-btn show-btn fade-in delay-3"
-            onclick="enterSurprise()">
-      Lets GOOO ➜
-    </button>
+<!-- STEP 3: BALLOON PROMPT -->
+<div id="balloonPrompt" style="display:none;" class="fade-in delay-2">
+  <p>But first… let's add some balloons 🎈</p>
+  <button class="qa-btn" onclick="showBalloons()">Add Balloons</button>
+</div>
+
+
+  <!-- STEP 4: MUSIC PROMPT -->
+  <div id="musicPrompt" style="display:none;" class="fade-in delay-2">
+    <p>Something's missing… click this to make it perfect 🎵</p>
+    <button class="qa-btn" onclick="startMusic()">Add Music</button>
   </div>
 
-  <!-- Background Music -->
+  <!-- BALLOONS -->
+  <div class="balloon-container"></div>
+
+  <!-- STEP 5: MAIN CONTENT -->
+  <div class="container" id="hiddenContent" style="display:none;">
+    <h1 id="title">Something special for you 🌙</h1>
+    <p id="message">Just a little surprise… it’s worth it 💫
+      <p>"Don't chase men Chase Atlantic" </p>
+        <p>~ Thats what SHE SAID!</p>
+      <p>
+      <button id="musicToggle" class="enter-btn show-btn fade-in delay-3"></button>
+    </p>
+    <button class="enter-btn show-btn fade-in delay-3" onclick="enterSurprise()">Lets GOOO ➜</button>
+  </div>
+
+  <!-- BACKGROUND MUSIC -->
   <audio id="bgMusic" loop>
     <source src="swim.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Play / Pause Button -->
-
-
-  <!-- Script -->
   <script>
     const music = document.getElementById("bgMusic");
     const toggleBtn = document.getElementById("musicToggle");
+    const balloonContainer = document.querySelector(".balloon-container");
+
+    /* ---------- SWITCH CSS ---------- */
+    function switchToMainCSS() {
+      const themeLink = document.getElementById("themeCSS");
+      if (themeLink) {
+        themeLink.href = "style.css"; // your main CSS
+      }
+    }
 
     /* ---------- MUSIC SETUP ---------- */
     if (music && toggleBtn) {
-
-      // Restore playback time
       const savedTime = localStorage.getItem("musicTime");
-      if (savedTime) {
-        music.currentTime = parseFloat(savedTime);
-      }
+      if (savedTime) music.currentTime = parseFloat(savedTime);
 
-      // Restore state
       const musicAllowed = localStorage.getItem("musicAllowed") === "true";
       const isPaused = localStorage.getItem("musicPaused") === "true";
 
-      toggleBtn.textContent = isPaused ? "▶ Play" : "⏸ Pause";
+      toggleBtn.textContent = isPaused ? "▶ Click" : "⏸ Pause";
 
-      // Auto-play on all pages AFTER first click
-      if (musicAllowed && !isPaused) {
-        music.play().catch(()=>{});
-      }
+      if (musicAllowed && !isPaused) music.play().catch(()=>{});
 
-      // Save current time
       setInterval(() => {
-        if (!music.paused) {
-          localStorage.setItem("musicTime", music.currentTime);
-        }
+        if (!music.paused) localStorage.setItem("musicTime", music.currentTime);
       }, 500);
 
-      // Play / Pause toggle
       toggleBtn.onclick = (e) => {
         e.stopPropagation();
-
         if (music.paused) {
           music.play().then(() => {
             toggleBtn.textContent = "⏸ Pause";
             localStorage.setItem("musicPaused", "false");
-            localStorage.setItem("musicAllowed", "true"); // 🔑 key
+            localStorage.setItem("musicAllowed", "true");
           }).catch(()=>{});
         } else {
           music.pause();
@@ -91,31 +112,68 @@
         localStorage.setItem("musicPaused", "false");
         localStorage.setItem("musicAllowed", "true");
       }
-
-      setTimeout(() => {
-        window.location.href = "wish.html";
-      }, 300);
+      setTimeout(() => { window.location.href = "wish.html"; }, 300);
     }
 
-    /* ---------- BALLOONS (RUN ONCE) ---------- */
-    const balloonContainer = document.querySelector(".balloon-container");
-    if (balloonContainer) {
-      const emojis = ["🎈","🎉","🎊"];
-      for (let i = 0; i < 30; i++) {
-        const b = document.createElement("span");
-        b.className = "balloon";
-        b.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        b.style.left = Math.random() * 100 + "vw";
-        b.style.fontSize = (20 + Math.random() * 30) + "px";
-        b.style.animationDuration = (8 + Math.random() * 8) + "s";
-        b.style.animationDelay = Math.random() * 5 + "s";
-        balloonContainer.appendChild(b);
+    /* ---------- BALLOONS ---------- */
+    function generateBalloons() {
+      if (!balloonContainer.hasChildNodes()) {
+        const emojis = ["🎈","🎉","🎊"];
+        for (let i = 0; i < 30; i++) {
+          const b = document.createElement("span");
+          b.className = "balloon";
+          b.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          b.style.left = Math.random() * 100 + "vw";
+          b.style.fontSize = (20 + Math.random() * 30) + "px";
+          b.style.animationDuration = (8 + Math.random() * 8) + "s";
+          b.style.animationDelay = Math.random() * 5 + "s";
+          balloonContainer.appendChild(b);
+        }
       }
+      balloonContainer.style.display = "block";
+    }
+
+    /* ---------- STEP FUNCTIONS ---------- */
+    /* ---------- STEP FUNCTIONS ---------- */
+function showPartyMood() {
+  // Hide first question
+  document.querySelector(".qa-box").style.display = "none";
+
+  // Show party mood statement
+  document.getElementById("partyMood").style.display = "block";
+
+  // DO NOT switch CSS here yet, stays bright
+}
+
+function showBalloonPrompt() {
+  // Hide party mood
+  document.getElementById("partyMood").style.display = "none";
+
+  // Switch to main night theme
+  switchToMainCSS();
+
+  // Show balloon prompt
+  document.getElementById("balloonPrompt").style.display = "block";
+}
+
+
+    function showBalloons() {
+      generateBalloons();
+      document.getElementById("balloonPrompt").style.display = "none";
+      document.getElementById("musicPrompt").style.display = "block";
+    }
+
+    function startMusic() {
+      if (music) {
+        music.play().catch(()=>{});
+        toggleBtn.textContent = "⏸ Pause";
+        localStorage.setItem("musicPaused", "false");
+        localStorage.setItem("musicAllowed", "true");
+      }
+      document.getElementById("musicPrompt").style.display = "none";
+      document.getElementById("hiddenContent").style.display = "block";
     }
   </script>
 
 </body>
 </html>
-
-
-

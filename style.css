@@ -51,7 +51,19 @@ p {
   transition: opacity 1s;
 }
 
-.enter-btn { display: none; /* display: inline-block; */ padding: 12px 28px; font-size: 1rem; border: none; border-radius: 30px; background: #ff4d6d; color: white; cursor: pointer; transition: 0.3s; animation: glow 1.5s infinite alternate; } .enter-btn:hover { transform: scale(1.08); background: #ff1f4a; }
+.enter-btn { 
+  display: none; /* display: inline-block; */ 
+  padding: 12px 28px; 
+  font-size: 1rem; 
+  border: none; 
+  border-radius: 30px; 
+  background: #ff4d6d; 
+  color: white; 
+  cursor: pointer; 
+  transition: 0.3s; 
+  animation: glow 1.5s 
+  infinite alternate; } 
+  .enter-btn:hover { transform: scale(1.08); background: #ff1f4a; }
 
 @keyframes glow {
   0% { box-shadow: 0 0 5px #ff4d6d; }
@@ -284,45 +296,58 @@ p {
 
 .memory-scroll-container::-webkit-scrollbar-track {
   background: transparent;
-}.music-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 8px 0 18px;
+}
+.music-btn {
+   display: inline-block; 
+  padding: 12px 28px; 
+  font-size: 1rem; 
+  border: none; 
+  border-radius: 30px; 
+  background: #ff4d6d; 
+  color: white; 
+  cursor: pointer; 
+  transition: 0.3s; 
+  animation: glow 1.5s 
+  infinite alternate; } 
+  .music-btn:hover { transform: scale(1.08); background: #ff1f4a; }
 
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
+@keyframes glow {
+  0% { box-shadow: 0 0 5px #ff4d6d; }
+  100% { box-shadow: 0 0 20px #ff1f4a; }
+}
 
+
+
+
+.qa-box {
+  margin: 20px 0 10px;
+}
+
+.qa-question {
+  font-size: 1.05rem;
+  margin-bottom: 12px;
+  opacity: 0.95;
+}
+
+.qa-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.qa-btn {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.15);
+  color: white;
   cursor: pointer;
-  letter-spacing: 0.3px;
-
-  position: relative;
-  transition: color 0.3s ease;
+  font-size: 0.9rem;
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
 }
 
-/* subtle underline */
-.music-btn::after {
-  content: "";
-  display: block;
-  width: 0%;
-  height: 1px;
-  margin: 6px auto 0;
-  background: rgba(255, 255, 255, 0.6);
-  transition: width 0.35s ease;
+.qa-btn:hover {
+  background: rgba(255,255,255,0.25);
+  transform: scale(1.05);
 }
-
-.music-btn:hover {
-  color: #ffffff;
-}
-
-.music-btn:hover::after {
-  width: 40%;
-}
-
-/* tiny glow when active */
-.music-btn:active {
-  opacity: 0.8;
-}
-
-
