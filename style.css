@@ -351,3 +351,12 @@ p {
   background: rgba(255,255,255,0.25);
   transform: scale(1.05);
 }
+
+.memory-photo {
+  width: 225px;
+  height: 225px;
+  object-fit: cover;     /* fills the box nicely */
+  border-radius: 15px;   /* matches your soft UI */
+  display: block;
+  margin: 0 auto;        /* center the image */
+}
